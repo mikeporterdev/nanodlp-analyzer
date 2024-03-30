@@ -1,12 +1,11 @@
 import 'react-dropzone-uploader/dist/styles.css'
-import Dropzone, { IFileWithMeta, StatusValue } from 'react-dropzone-uploader'
-import { useState } from 'react';
 import { useNanoDLP } from './NanoDlpFileContext.tsx';
 import JSZip from 'jszip';
 import './Uploader.css'
 import pako from 'pako';
 import Papa from 'papaparse';
 import { ChartData } from './NanoDlpTypes.ts';
+import { Button, Form, Input } from 'semantic-ui-react';
 
 const sliceFileRegex = /^\d+(-\d+)?\.png$/;
 
@@ -17,8 +16,7 @@ const determineSliceFiles = (fileList: string[]) => {
 const decompressGzip = (uint8array: Uint8Array) => {
   // Use pako to decompress the gzip file
   try {
-    const decompressed = pako.inflate(uint8array);
-    return decompressed;
+    return pako.inflate(uint8array);
   } catch (err) {
     console.error('Error decompressing file', err);
     throw err;
@@ -26,88 +24,76 @@ const decompressGzip = (uint8array: Uint8Array) => {
 };
 
 export const Uploader = () => {
-  const [spinnerShow, setSpinnerShow] = useState(false)
-
-  const {fileName, plate, chartData, updateState} = useNanoDLP();
+  const {updateState} = useNanoDLP();
 
   const zip = new JSZip();
 
-  // called every time a file's `status` changes
-  const handleChangeStatus = (file: IFileWithMeta, status: StatusValue) => {
-    console.log(status)
-    if (status === 'done') {
-      const {file: {name}} = file;
 
-      updateState({fileName: name})
-      zip.loadAsync(file.file).then(value => {
-        const filesNames = Object.keys(value.files);
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    // Check if files were selected and update the state
+    console.log(event.target.files)
+    const file = event.target.files ? event.target.files[0] : null
 
-        zip.file('plate.json')?.async('string').then(data => {
-          updateState({plate: JSON.parse(data)})
-        })
-
-        const sliceFileNames = determineSliceFiles(filesNames);
-        updateState({sliceFileNames})
-
-        const csvFiles = Object.values(value.files).filter(file => file.name.startsWith('analytic-'));
-
-        Promise.all(csvFiles.map(file => {
-          return file.async('uint8array')
-            .then(uint8array => decompressGzip(uint8array))
-            .then(decompressed => {
-              const text = new TextDecoder('utf-8').decode(decompressed);
-              return new Promise<ChartData[]>((resolve) => {
-                Papa.parse<ChartData>(text, {
-                  header: true,
-                  complete: (results) => resolve(results.data),
-                });
-              });
-            })
-        }))
-          .then((results) => {
-            const chartData = results.flat(1);
-            updateState({chartData})
-          });
-
-      })
-      setSpinnerShow(false);
-    } else if (status === 'preparing') {
-      setSpinnerShow(true);
-    } else if (status === 'removed') {
-      updateState({plate: undefined, chartData: undefined, fileName: undefined, sliceFileNames: undefined})
+    if (!file) {
+      return;
     }
-  }
+
+
+    updateState({fileName: file.name})
+    zip.loadAsync(file).then(value => {
+      const filesNames = Object.keys(value.files);
+
+      zip.file('plate.json')?.async('string').then(data => {
+        updateState({plate: JSON.parse(data)})
+      })
+
+      const sliceFileNames = determineSliceFiles(filesNames);
+      updateState({sliceFileNames})
+
+      const csvFiles = Object.values(value.files).filter(file => file.name.startsWith('analytic-'));
+
+      Promise.all(csvFiles.map(file => {
+        return file.async('uint8array')
+          .then(uint8array => decompressGzip(uint8array))
+          .then(decompressed => {
+            const text = new TextDecoder('utf-8').decode(decompressed);
+            return new Promise<ChartData[]>((resolve) => {
+              Papa.parse<ChartData>(text, {
+                header: true,
+                complete: (results) => resolve(results.data),
+              });
+            });
+          })
+      }))
+        .then((results) => {
+          const chartData = results.flat(1);
+          updateState({chartData})
+        });
+
+    })
+  };
 
   return (
     <>
-      <div className="spinner" style={{display: spinnerShow ? 'inline' : 'none'}}>spinner</div>
-      {fileName}
-      <Dropzone
-        onChangeStatus={handleChangeStatus}
-        accept=".nanodlp"
-        submitButtonDisabled={true}
-        multiple={false}
-        maxFiles={1}
-        styles={{
-          dropzone: {
-            overflow: 'hidden'
-          }
-        }}
-      />
-
-      {plate &&
-          <div>
-              PLATE
-            {JSON.stringify(plate)}
-          </div>
-      }
-
-      {chartData &&
-        <div>
-            CHART DATA LENGTH
-          {chartData.length}
-        </div>
-      }
+      <Form>
+        <Form.Field>
+          <label>File Upload</label>
+          <Input
+            id="fileInput"
+            type="file"
+            accept=".nanodlp"
+            style={{display: "none"}}
+            onChange={handleFileChange}
+          />
+          <Button
+            content="Choose NanoDLP file"
+            labelPosition="left"
+            icon="file"
+            as="label"
+            htmlFor="fileInput"
+          />
+        </Form.Field>
+      </Form>
     </>
   )
 };
