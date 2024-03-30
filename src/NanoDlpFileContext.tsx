@@ -1,12 +1,13 @@
 // Define the shape of the context state
 import { createContext, ReactNode, useContext, useState } from 'react';
-import { ChartData, NanoDlpPlate } from './NanoDlpTypes.ts';
+import { ChartData, NanoDlpPlate, ResinProfile } from './NanoDlpTypes.ts';
 
 export interface NanoDlpData {
   fileName?: string;
   chartData?: ChartData[];
   sliceFileNames?: string[];
   plate?: NanoDlpPlate;
+  profile?: ResinProfile
 }
 
 interface NanoDlpState {

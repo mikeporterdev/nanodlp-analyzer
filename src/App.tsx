@@ -35,6 +35,9 @@ function App() {
           {nanoDlpData?.plate &&
               <JsonInfo plateInfo={nanoDlpData.plate} title="Plate Info"></JsonInfo>
           }
+          {nanoDlpData?.profile &&
+              <JsonInfo plateInfo={nanoDlpData.profile} title="Profile Info"></JsonInfo>
+          }
         </Grid>
       </Container>
     </>

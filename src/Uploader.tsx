@@ -38,6 +38,7 @@ export const Uploader = () => {
     const filesNames = Object.keys(value.files);
 
     const plateData = await zip.file('plate.json')?.async('string');
+    const profileData = await zip.file('profile.json')?.async('string');
 
     const sliceFileNames = determineSliceFiles(filesNames);
 
@@ -66,6 +67,7 @@ export const Uploader = () => {
       chartData,
       sliceFileNames,
       plate: plateData ? JSON.parse(plateData) : null,
+      profile: profileData ? JSON.parse(profileData) : null,
     }
 
     updateState({nanoDlpData})
