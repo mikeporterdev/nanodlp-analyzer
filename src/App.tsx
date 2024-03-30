@@ -1,7 +1,7 @@
 import './App.css'
 import { Uploader } from './Uploader.tsx';
 import { useNanoDLP } from './NanoDlpFileContext.tsx';
-import { Container, Grid, Header } from 'semantic-ui-react';
+import { Container, Grid, Header, Segment } from 'semantic-ui-react';
 import 'semantic-ui-css/semantic.min.css'
 import JsonInfo from './plate-infos/JsonInfo.tsx';
 import PlateChart from './plate-infos/PlateChart.tsx';
@@ -17,8 +17,11 @@ function App() {
         <Grid centered columns={3}>
           {!nanoDlpData &&
               <Grid.Column>
-                  <Header>Upload a .nanodlp file</Header>
-                  <Uploader></Uploader>
+                  <Header attached={'top'}>Upload a .nanodlp or .zip file</Header>
+                  <Segment attached>
+                    <Uploader></Uploader>
+
+                  </Segment>
               </Grid.Column>
 
           }
