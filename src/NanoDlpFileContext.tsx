@@ -1,9 +1,12 @@
 // Define the shape of the context state
 import { createContext, ReactNode, useContext, useState } from 'react';
+import { ChartData, NanoDlpPlate } from './NanoDlpTypes.ts';
 
 interface NanoDLPState {
-  fileName: string;
-  fileSize: number;
+  fileName?: string;
+  chartData?: ChartData[];
+  sliceFileNames?: string[];
+  plate?: NanoDlpPlate;
 }
 
 // Define the shape of the context including the updater function
@@ -16,7 +19,7 @@ const NanoDLPContext = createContext<NanoDLPContextType | undefined>(undefined);
 
 // Define a provider component
 export const NanoDLPProvider: React.FC<{children: ReactNode}> = ({ children }) => {
-  const [state, setState] = useState<NanoDLPState>({ fileName: '', fileSize: 0 });
+  const [state, setState] = useState<NanoDLPState>({});
 
   // Function to update the state, allows partial updates
   const updateState = (newState: Partial<NanoDLPState>) => {
