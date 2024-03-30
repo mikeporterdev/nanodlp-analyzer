@@ -2,16 +2,20 @@
 import { createContext, ReactNode, useContext, useState } from 'react';
 import { ChartData, NanoDlpPlate } from './NanoDlpTypes.ts';
 
-interface NanoDLPState {
+export interface NanoDlpData {
   fileName?: string;
   chartData?: ChartData[];
   sliceFileNames?: string[];
   plate?: NanoDlpPlate;
 }
 
+interface NanoDlpState {
+  nanoDlpData?: NanoDlpData
+}
+
 // Define the shape of the context including the updater function
-interface NanoDLPContextType extends NanoDLPState {
-  updateState: (newState: Partial<NanoDLPState>) => void;
+interface NanoDLPContextType extends NanoDlpState {
+  updateState: (newState: Partial<NanoDlpState>) => void;
 }
 
 // Create a context with a default value
@@ -19,10 +23,10 @@ const NanoDLPContext = createContext<NanoDLPContextType | undefined>(undefined);
 
 // Define a provider component
 export const NanoDLPProvider: React.FC<{children: ReactNode}> = ({ children }) => {
-  const [state, setState] = useState<NanoDLPState>({});
+  const [state, setState] = useState<NanoDlpState>({});
 
   // Function to update the state, allows partial updates
-  const updateState = (newState: Partial<NanoDLPState>) => {
+  const updateState = (newState: Partial<NanoDlpState>) => {
     setState((prevState) => ({ ...prevState, ...newState }));
   };
 
