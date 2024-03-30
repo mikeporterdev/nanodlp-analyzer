@@ -1,4 +1,3 @@
-import 'react-dropzone-uploader/dist/styles.css'
 import { NanoDlpData, useNanoDLP } from './NanoDlpFileContext.tsx';
 import JSZip from 'jszip';
 import './Uploader.css'
@@ -44,21 +43,23 @@ export const Uploader = () => {
 
     const csvFiles = Object.values(value.files).filter(file => file.name.startsWith('analytic-'));
 
-    const results = await Promise.all(csvFiles.map(file => {
-      return file.async('uint8array')
-        .then(uint8array => decompressGzip(uint8array))
-        .then(decompressed => {
-          const text = new TextDecoder('utf-8').decode(decompressed);
-          return new Promise<ChartData[]>((resolve) => {
-            Papa.parse<ChartData>(text, {
-              header: true,
-              complete: (results) => resolve(results.data),
-            });
-          });
-        })
-    }));
+    // todo: support more than one csv file
+    const csvFile = csvFiles[csvFiles.length - 1]
 
-    const chartData = results.flat(1);
+    const results = await csvFile.async('uint8array')
+      .then(uint8array => decompressGzip(uint8array))
+      .then(decompressed => {
+        const text = new TextDecoder('utf-8').decode(decompressed);
+        return new Promise<ChartData[]>((resolve) => {
+          Papa.parse<ChartData>(text, {
+            header: true,
+            dynamicTyping: true,
+            complete: (results) => resolve(results.data),
+          });
+        });
+      })
+
+    const chartData = results;
 
     let nanoDlpData: NanoDlpData = {
       fileName: file.name,
