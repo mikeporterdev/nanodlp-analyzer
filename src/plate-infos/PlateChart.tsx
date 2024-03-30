@@ -1,9 +1,9 @@
-import React from 'react';
 import { Header, Segment } from 'semantic-ui-react';
 import { ChartData } from '../NanoDlpTypes.ts';
 import UplotReact from 'uplot-react';
 import 'uplot/dist/uPlot.min.css';
 import { getSeriesAndData } from '../chart-data-generator.ts';
+import { AlignedData } from 'uplot';
 
 interface PlateChartProps {
   chartData: ChartData[];
@@ -11,7 +11,9 @@ interface PlateChartProps {
 
 
 const PlateChart = (props: PlateChartProps) => {
-  const {filteredData, filteredSeries, axes} = getSeriesAndData(props.chartData)
+  const {filteredData: filteredData, filteredSeries, axes} = getSeriesAndData(props.chartData)
+
+  const filters = filteredData as AlignedData
 
   console.log('filteredData', filteredData)
   console.log('filteredSeries', filteredSeries)
@@ -32,7 +34,7 @@ const PlateChart = (props: PlateChartProps) => {
       <Segment attached>
         <UplotReact
 
-          data={filteredData}
+          data={filters  }
           options={
             options}
           >

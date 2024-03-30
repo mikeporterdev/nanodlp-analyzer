@@ -1,5 +1,4 @@
 import { Container, GridColumn, Header, Segment } from 'semantic-ui-react';
-import { NanoDlpPlate } from '../NanoDlpTypes.ts';
 
 interface JsonInfoProps {
   plateInfo: any,

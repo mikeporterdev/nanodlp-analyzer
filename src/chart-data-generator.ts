@@ -1,13 +1,14 @@
 import { ChartData } from './NanoDlpTypes.ts';
+
 const ColourValues = [
-  "FF0000", "00FF00", "0000FF", "FFFF00", "FF00FF", "00FFFF", "000000",
-  "800000", "008000", "000080", "808000", "800080", "008080", "808080",
-  "C00000", "00C000", "0000C0", "C0C000", "C000C0", "00C0C0", "C0C0C0",
-  "400000", "004000", "000040", "404000", "400040", "004040", "404040",
-  "200000", "002000", "000020", "202000", "200020", "002020", "202020",
-  "600000", "006000", "000060", "606000", "600060", "006060", "606060",
-  "A00000", "00A000", "0000A0", "A0A000", "A000A0", "00A0A0", "A0A0A0",
-  "E00000", "00E000", "0000E0", "E0E000", "E000E0", "00E0E0", "E0E0E0",
+  'FF0000', '00FF00', '0000FF', 'FFFF00', 'FF00FF', '00FFFF', '000000',
+  '800000', '008000', '000080', '808000', '800080', '008080', '808080',
+  'C00000', '00C000', '0000C0', 'C0C000', 'C000C0', '00C0C0', 'C0C0C0',
+  '400000', '004000', '000040', '404000', '400040', '004040', '404040',
+  '200000', '002000', '000020', '202000', '200020', '002020', '202020',
+  '600000', '006000', '000060', '606000', '600060', '006060', '606060',
+  'A00000', '00A000', '0000A0', 'A0A000', 'A000A0', '00A0A0', 'A0A0A0',
+  'E00000', '00E000', '0000E0', 'E0E000', 'E000E0', '00E0E0', 'E0E0E0',
 ];
 const axesInfo = [
   {'Type': 'mm', 'Name': 'Layer Height', 'Key': 'LayerHeight', 'Decimal': 2}, {
@@ -52,51 +53,51 @@ const axesInfo = [
     'Decimal': 2
   }, {'Type': 'RPM', 'Name': 'UV Fan RPM', 'Key': 'UVFanRPM', 'Decimal': 2}]
 
-function isNotAllNull(subArray) {
+function isNotAllNull<T>(subArray: T[]): boolean {
   return subArray.some(element => element !== null);
 }
 
 function aggregateFunc(v, aggregate) {
-  let val = parseFloat(v / 1000000000);
+  const val = v / 1000000000;
   if (aggregate == 0) return val;
   return Math.round(val / aggregate) * aggregate;
 }
 
-export const processData = (dataResponse: ChartItem[]) => {
+export const processData = (dataResponse: ChartData[]) => {
   let previousAggregateValue;
-  let series = getSeries();
-  let processedData = series.map(_serie => []);
+  const series = getSeries();
+  const processedData: Array<Array<number | null>> = series.map(() => []);
   let dataPointIndex = 0;
 
-  console.log(dataResponse.filter(i => i["ID"] < 1000))
+  console.log(dataResponse.filter(i => i['ID'] < 1000))
 
   dataResponse
-    .filter(i => i["ID"])
+    .filter(i => i['ID'])
     .forEach(responseItem => {
-    let currentAggregateValue = aggregateFunc(responseItem["ID"], 0);
-    if (currentAggregateValue != previousAggregateValue) {
-      for (let j = 0; j < series.length; j++) {
-        processedData[j][dataPointIndex] = null;
+      const currentAggregateValue = aggregateFunc(responseItem['ID'], 0);
+      if (currentAggregateValue != previousAggregateValue) {
+        for (let j = 0; j < series.length; j++) {
+          processedData[j][dataPointIndex] = null;
+        }
+        processedData[0][dataPointIndex] = currentAggregateValue;
+        previousAggregateValue = currentAggregateValue;
+        dataPointIndex++;
       }
-      processedData[0][dataPointIndex] = currentAggregateValue;
-      previousAggregateValue = currentAggregateValue;
-      dataPointIndex++;
-    }
 
-    try {
-        processedData[responseItem["T"] + 1][dataPointIndex - 1] = responseItem["V"];
-    } catch (e) {
-      console.log(processedData)
-      console.log(responseItem)
-      throw e;
-    }
-  })
+      try {
+        processedData[responseItem['T'] + 1][dataPointIndex - 1] = responseItem['V'];
+      } catch (e) {
+        console.log(processedData)
+        console.log(responseItem)
+        throw e;
+      }
+    })
 
   return processedData
 }
 
 export const getSeriesAndData = (dataRows: ChartData[]) => {
-  let series = getSeries();
+  const series = getSeries();
 
   const processedData = processData(dataRows);
 
@@ -108,26 +109,49 @@ export const getSeriesAndData = (dataRows: ChartData[]) => {
   return {filteredData, filteredSeries, axes}
 }
 
+interface Series {
+  show?: boolean,
+  spanGaps?: boolean,
+  label?: string,
+  scale?: string,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  value?: (a: any, b: any) => string,
+  stroke?: string,
+  width?: number,
+}
+
 function getSeries() {
-  let series = [{}];
+  const series: Series[] = [{}];
   axesInfo.forEach((element, key) => {
     series.push({
       show: true,
       spanGaps: true,
       label: element.Name,
       scale: element.Type,
-      value: (self, rawValue) => (rawValue != null ? rawValue.toFixed(element.Decimal) + element.Type : ""),
-      stroke: "#" + ColourValues[key] + "88",
+      value: (_, rawValue) => (rawValue != null ? rawValue.toFixed(element.Decimal) + element.Type : ''),
+      stroke: '#' + ColourValues[key] + '88',
       width: 1,
     });
   });
   return series;
 }
 
+interface Axes {
+  labelSize?: number,
+  gap?: number,
+  size?: number,
+  side?: number,
+  grid?: { show: boolean },
+  scale?: string,
+  label?: string,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  values?: any
+}
+
 function prepareAxis(series) {
-  let axes = [{}];
+  const axes: Axes[] = [{}];
   for (let seriesIdx = 1; seriesIdx < series.length; seriesIdx++) {
-    let scale = series[seriesIdx].scale;
+    const scale = series[seriesIdx].scale;
 
     const found = axes.some(axis => axis.scale === scale);
 
@@ -142,23 +166,23 @@ function prepareAxis(series) {
           grid: {show: false},
           label: scale,
           scale: scale,
-          values: (self, ticks) => ticks.map(rawValue => rawValue.toFixed(decimalPlaces)),
+          values: (_, ticks) => ticks.map(rawValue => rawValue.toFixed(decimalPlaces)),
         }
       )
     }
   }
 
-  let halfOfAxisCount = parseInt(axes.length / 2) + 1;
+  const halfOfAxisCount = Math.ceil(axes.length / 2) + 1;
   for (let j = halfOfAxisCount; j < axes.length; j++) {
     axes[j].side = 1;
   }
-  axes[1].grid.show = true;
+  axes[1].grid!.show = true;
   return axes;
 }
 
 function determineDecimalPlaces(scale) {
-  let zeroPlaceScales = ["px", "Pressure"];
-  let onePlaceScales = ["s", "mm", "°C"];
+  const zeroPlaceScales = ['px', 'Pressure'];
+  const onePlaceScales = ['s', 'mm', '°C'];
 
   if (zeroPlaceScales.includes(scale)) {
     return 0;
