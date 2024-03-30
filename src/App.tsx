@@ -2,16 +2,15 @@ import './App.css'
 import 'react-dropzone-uploader/dist/styles.css'
 import { Uploader } from './Uploader.tsx';
 import { useNanoDLP } from './NanoDlpFileContext.tsx';
-import { Button, Container, Grid, GridColumn, Header } from 'semantic-ui-react';
+import { Container, Grid, Header } from 'semantic-ui-react';
 import 'semantic-ui-css/semantic.min.css'
+import JsonInfo from './plate-infos/JsonInfo.tsx';
 
 function App() {
   const {nanoDlpData} = useNanoDLP();
 
   return (
     <>
-
-
       <Container style={{marginTop: '3em'}}>
         <Header as="h1">NanoDLP Analyzer</Header>
 
@@ -23,10 +22,8 @@ function App() {
               </Grid.Column>
 
           }
-          {nanoDlpData &&
-            <GridColumn>
-                <Header>File Uploaded!</Header>
-            </GridColumn>
+          {nanoDlpData?.plate &&
+              <JsonInfo plateInfo={nanoDlpData.plate} title="Plate Info"></JsonInfo>
           }
         </Grid>
       </Container>
