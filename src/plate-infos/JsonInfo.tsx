@@ -1,4 +1,4 @@
-import { GridColumn, Header } from 'semantic-ui-react';
+import { Container, GridColumn, Header, Segment } from 'semantic-ui-react';
 import { NanoDlpPlate } from '../NanoDlpTypes.ts';
 
 interface JsonInfoProps {
@@ -9,13 +9,19 @@ interface JsonInfoProps {
 const JsonInfo = ({plateInfo, title}: JsonInfoProps) => {
   return (
     <GridColumn>
-      <Header>{title}</Header>
+      <Container>
+        <Header attached="top" block>{title}</Header>
 
-      <div className="ui segment">
-        <pre><code className="json">
-          {JSON.stringify(plateInfo, null, 2)}
-        </code> </pre>
-      </div>
+        <Segment attached>
+          <pre>
+            <code className="json">
+              {JSON.stringify(plateInfo, null, 2)}
+            </code>
+          </pre>
+        </Segment>
+
+      </Container>
+
 
     </GridColumn>
   );

@@ -2,7 +2,7 @@ import './App.css'
 import 'react-dropzone-uploader/dist/styles.css'
 import { Uploader } from './Uploader.tsx';
 import { useNanoDLP } from './NanoDlpFileContext.tsx';
-import { Container, Grid, Header } from 'semantic-ui-react';
+import { Container, Grid, GridColumn, GridRow, Header, Segment } from 'semantic-ui-react';
 import 'semantic-ui-css/semantic.min.css'
 import JsonInfo from './plate-infos/JsonInfo.tsx';
 
@@ -21,6 +21,16 @@ function App() {
                   <Uploader></Uploader>
               </Grid.Column>
 
+          }
+          {nanoDlpData?.chartData &&
+              <Grid.Row>
+                <Grid.Column width={15}>
+                    <Header attached="top" block>Chart Data</Header>
+                    <Segment attached>
+                        Chart Goes Here Eventually
+                    </Segment>
+                </Grid.Column>
+              </Grid.Row>
           }
           {nanoDlpData?.plate &&
               <JsonInfo plateInfo={nanoDlpData.plate} title="Plate Info"></JsonInfo>
