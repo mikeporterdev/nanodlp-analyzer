@@ -61,7 +61,7 @@ export const Uploader = () => {
 
     const chartData = results;
 
-    let nanoDlpData: NanoDlpData = {
+    const nanoDlpData: NanoDlpData = {
       fileName: file.name,
       chartData,
       sliceFileNames,
@@ -80,7 +80,7 @@ export const Uploader = () => {
           <Input
             id="fileInput"
             type="file"
-            accept=".nanodlp"
+            accept=".nanodlp,.zip"
             style={{display: 'none'}}
             onChange={handleFileChange}
           />
