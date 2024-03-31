@@ -37,6 +37,16 @@ function App() {
                       </Grid.Column>
                   </Grid.Row>
               }
+
+                <GridRow>
+
+
+                  {nanoDlpData?.sliceFileNames && nanoDlpData.zip &&
+                      <LayerImagePreview groupedLayerImages={nanoDlpData.sliceFileNames}
+                                         jsZip={nanoDlpData.zip}></LayerImagePreview>
+                  }
+                </GridRow>
+
                 <Grid.Column>
                   {nanoDlpData?.plate &&
                       <JsonInfo plateInfo={nanoDlpData.plate} title="Plate Info"></JsonInfo>
@@ -57,14 +67,7 @@ function App() {
                           <StlPreview imageData={nanoDlpData.image}></StlPreview>
                       }
                     </GridRow>
-                    <GridRow>
 
-
-                      {nanoDlpData?.sliceFileNames && nanoDlpData.zip &&
-                          <LayerImagePreview groupedLayerImages={nanoDlpData.sliceFileNames}
-                                             jsZip={nanoDlpData.zip}></LayerImagePreview>
-                      }
-                    </GridRow>
                 </Grid.Column>
 
             </Grid>

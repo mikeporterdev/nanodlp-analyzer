@@ -75,7 +75,7 @@ const LayerImagePreview = (props: LayerImagePreviewProps) => {
           <input style={{width: "100%"}} type={'range'} min={1} max={maxLayers} value={layer} onChange={setLayerCmp2} />
         </Form>
 
-        {imageUrl && <img src={imageUrl} style={{width: 300}}  alt="Extracted from ZIP"/>}
+        {imageUrl && <img src={imageUrl} style={{width: 300, aspectRatio: 2.25}}  alt="Extracted from ZIP"/>}
 
       </Segment>
     </Container>
