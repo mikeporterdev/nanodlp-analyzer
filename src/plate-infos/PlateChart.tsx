@@ -3,7 +3,7 @@ import { ChartData } from '../NanoDlpTypes.ts';
 import UplotReact from 'uplot-react';
 import 'uplot/dist/uPlot.min.css';
 import { getSeriesAndData } from '../chart-data-generator.ts';
-import { AlignedData } from 'uplot';
+import { AlignedData, Options } from 'uplot';
 
 interface PlateChartProps {
   chartData: ChartData[];
@@ -15,7 +15,7 @@ const PlateChart = (props: PlateChartProps) => {
 
   const filters = filteredData as AlignedData
 
-  const options = {
+  const options: Options = {
     title: 'Sensor Data',
     id: 'chart1',
     class: 'my-chart',
@@ -24,6 +24,7 @@ const PlateChart = (props: PlateChartProps) => {
     width: 1000,
     height: 300,
   };
+
   return (
     <>
       <Header attached="top" block>Chart Data</Header>

@@ -1,4 +1,4 @@
-import { Button, Container, GridRow, Header, Segment } from 'semantic-ui-react';
+import { Button, Container, Form, GridRow, Header, Input, Segment } from 'semantic-ui-react';
 import { GroupedFilesByLayer } from '../Uploader.tsx';
 import JSZip from 'jszip';
 import { useState } from 'react';
@@ -16,6 +16,7 @@ const LayerImagePreview = (props: LayerImagePreviewProps) => {
   console.log(props.groupedLayerImages[layer])
 
 
+  const maxLayers = Object.keys(props.groupedLayerImages).length + 1;
 
   const renderLayer = () => {
     const groupedLayerImage = props.groupedLayerImages[layer];
@@ -33,7 +34,7 @@ const LayerImagePreview = (props: LayerImagePreviewProps) => {
   }
 
   const inc = () => {
-    setLayer(layer + 1);
+    setLayer( 1 + layer);
     renderLayer()
   }
 
@@ -46,6 +47,19 @@ const LayerImagePreview = (props: LayerImagePreviewProps) => {
 
   }
 
+  const setLayerCmpTextInput = (_, layer) => {
+    console.log(layer.value)
+    setLayer(parseInt(layer.value));
+    renderLayer();
+  }
+
+  const setLayerCmp2 = (evt) => {
+    console.log(evt.target.value)
+    setLayer(parseInt(evt.target.value));
+    renderLayer();
+  }
+
+
 
   return (
     <GridRow>
@@ -53,9 +67,13 @@ const LayerImagePreview = (props: LayerImagePreviewProps) => {
     <Container>
       <Header attached={'top'}>Slice Image Preview</Header>
       <Segment attached>
-        <Button onClick={dec}>Prev</Button>
-        Layer: {layer}
-        <Button onClick={inc}>Next</Button>
+        <Form>
+            <Button labelPosition={'left'} icon={'left chevron'} onClick={dec} content={'Prev'} attached={'left'}/>
+            <Input type={'number'} style={{width: 80}} value={layer} onChange={setLayerCmpTextInput}/>
+            <Button labelPosition={'right'} icon={'right chevron'} onClick={inc} content={'Next'} attached={'right'}/>
+          <br/>
+          <input style={{width: "100%"}} type={'range'} min={1} max={maxLayers} value={layer} onChange={setLayerCmp2} />
+        </Form>
 
         {imageUrl && <img src={imageUrl} style={{width: 300}}  alt="Extracted from ZIP"/>}
 

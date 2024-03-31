@@ -1,7 +1,7 @@
 import './App.css'
 import { Uploader } from './Uploader.tsx';
 import { useNanoDLP } from './NanoDlpFileContext.tsx';
-import { Container, Grid, Header, Segment } from 'semantic-ui-react';
+import { Container, Grid, GridRow, Header, Segment } from 'semantic-ui-react';
 import 'semantic-ui-css/semantic.min.css'
 import JsonInfo from './plate-infos/JsonInfo.tsx';
 import PlateChart from './plate-infos/PlateChart.tsx';
@@ -28,8 +28,8 @@ function App() {
             </Grid>
 
         }
-        { nanoDlpData &&
-          <Grid columns={3}>
+        {nanoDlpData &&
+            <Grid columns={3}>
               {nanoDlpData?.chartData &&
                   <Grid.Row>
                       <Grid.Column width={16}>
@@ -37,30 +37,37 @@ function App() {
                       </Grid.Column>
                   </Grid.Row>
               }
-              <Grid.Column>
-                {nanoDlpData?.plate &&
-                    <JsonInfo plateInfo={nanoDlpData.plate} title="Plate Info"></JsonInfo>
-                }
+                <Grid.Column>
+                  {nanoDlpData?.plate &&
+                      <JsonInfo plateInfo={nanoDlpData.plate} title="Plate Info"></JsonInfo>
+                  }
 
-              </Grid.Column>
-              <Grid.Column>
-                {nanoDlpData?.profile &&
-                    <JsonInfo plateInfo={nanoDlpData.profile} title="Profile Info"></JsonInfo>
-                }
+                </Grid.Column>
+                <Grid.Column>
+                  {nanoDlpData?.profile &&
+                      <JsonInfo plateInfo={nanoDlpData.profile} title="Profile Info"></JsonInfo>
+                  }
 
-              </Grid.Column>
-              <Grid.Column>
-                {nanoDlpData?.image &&
-                    <StlPreview imageData={nanoDlpData.image}></StlPreview>
-                }
+                </Grid.Column>
+                <Grid.Column>
 
-              {nanoDlpData?.sliceFileNames && nanoDlpData.zip &&
-                  <LayerImagePreview groupedLayerImages={nanoDlpData.sliceFileNames}
-                                     jsZip={nanoDlpData.zip}></LayerImagePreview>
-              }
-              </Grid.Column>
+                    <GridRow>
 
-          </Grid>
+                      {nanoDlpData?.image &&
+                          <StlPreview imageData={nanoDlpData.image}></StlPreview>
+                      }
+                    </GridRow>
+                    <GridRow>
+
+
+                      {nanoDlpData?.sliceFileNames && nanoDlpData.zip &&
+                          <LayerImagePreview groupedLayerImages={nanoDlpData.sliceFileNames}
+                                             jsZip={nanoDlpData.zip}></LayerImagePreview>
+                      }
+                    </GridRow>
+                </Grid.Column>
+
+            </Grid>
         }
       </Container>
     </>
