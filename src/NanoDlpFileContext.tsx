@@ -1,14 +1,17 @@
 // Define the shape of the context state
 import { createContext, ReactNode, useContext, useState } from 'react';
 import { ChartData, NanoDlpPlate, ResinProfile } from './NanoDlpTypes.ts';
+import JSZip from 'jszip';
+import { GroupedFilesByLayer } from './Uploader.tsx';
 
 export interface NanoDlpData {
   fileName?: string;
   chartData?: ChartData[];
-  sliceFileNames?: string[];
+  sliceFileNames?: GroupedFilesByLayer;
   plate?: NanoDlpPlate;
   profile?: ResinProfile
   image?: Blob;
+  zip?: JSZip;
 }
 
 interface NanoDlpState {

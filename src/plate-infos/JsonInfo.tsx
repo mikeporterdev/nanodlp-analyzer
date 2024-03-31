@@ -1,4 +1,4 @@
-import { Container, GridColumn, Header, Segment } from 'semantic-ui-react';
+import { Container, Header, Segment } from 'semantic-ui-react';
 
 interface JsonInfoProps {
   plateInfo: any,
@@ -7,7 +7,6 @@ interface JsonInfoProps {
 
 const JsonInfo = ({plateInfo, title}: JsonInfoProps) => {
   return (
-    <GridColumn>
       <Container>
         <Header attached="top" block>{title}</Header>
 
@@ -18,11 +17,7 @@ const JsonInfo = ({plateInfo, title}: JsonInfoProps) => {
             </code>
           </pre>
         </Segment>
-
       </Container>
-
-
-    </GridColumn>
   );
 };
 

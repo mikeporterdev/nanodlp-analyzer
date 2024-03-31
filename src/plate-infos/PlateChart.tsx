@@ -15,9 +15,6 @@ const PlateChart = (props: PlateChartProps) => {
 
   const filters = filteredData as AlignedData
 
-  console.log('filteredData', filteredData)
-  console.log('filteredSeries', filteredSeries)
-
   const options = {
     title: 'Sensor Data',
     id: 'chart1',
@@ -27,7 +24,6 @@ const PlateChart = (props: PlateChartProps) => {
     width: 1000,
     height: 300,
   };
-  console.log(options)
   return (
     <>
       <Header attached="top" block>Chart Data</Header>

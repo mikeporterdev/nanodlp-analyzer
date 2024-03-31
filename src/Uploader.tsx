@@ -6,10 +6,26 @@ import Papa from 'papaparse';
 import { ChartData } from './NanoDlpTypes.ts';
 import { Button, Form, Input } from 'semantic-ui-react';
 
-const sliceFileRegex = /^\d+(-\d+)?\.png$/;
+export type GroupedFilesByLayer = {
+  [key: string]: string[];
+}
 
-const determineSliceFiles = (fileList: string[]) => {
-  return fileList.filter(file => sliceFileRegex.test(file))
+function groupFilesByFirstNumber(files: string[]): GroupedFilesByLayer {
+  const grouped: GroupedFilesByLayer = {};
+
+  files.forEach(file => {
+    // Extract the first number (before the hyphen, if it exists)
+    const match = file.match(/^(\d+)(?:-|\.\png$)/);
+    if (match) {
+      const firstNumber = match[1];
+      if (!grouped[firstNumber]) {
+        grouped[firstNumber] = [];
+      }
+      grouped[firstNumber].push(file);
+    }
+  });
+
+  return grouped;
 }
 
 const decompressGzip = (uint8array: Uint8Array) => {
@@ -40,7 +56,8 @@ export const Uploader = () => {
     const plateData = await zip.file('plate.json')?.async('string');
     const profileData = await zip.file('profile.json')?.async('string');
 
-    const sliceFileNames = determineSliceFiles(filesNames);
+    const sliceFileNames = groupFilesByFirstNumber(filesNames);
+    console.log(sliceFileNames)
 
     const csvFiles = Object.values(value.files).filter(file => file.name.startsWith('analytic-'));
 
@@ -63,9 +80,10 @@ export const Uploader = () => {
     const imageData = await zip.file('3d.png')?.async('blob')
 
     const nanoDlpData: NanoDlpData = {
+      zip,
       fileName: file.name,
       chartData,
-      sliceFileNames,
+      sliceFileNames: Object.keys(sliceFileNames).length > 0 ? sliceFileNames : undefined,
       plate: plateData ? JSON.parse(plateData) : null,
       profile: profileData ? JSON.parse(profileData) : null,
       image: imageData,
