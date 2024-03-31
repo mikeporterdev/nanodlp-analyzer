@@ -5,6 +5,7 @@ import { Container, Grid, Header, Segment } from 'semantic-ui-react';
 import 'semantic-ui-css/semantic.min.css'
 import JsonInfo from './plate-infos/JsonInfo.tsx';
 import PlateChart from './plate-infos/PlateChart.tsx';
+import StlPreview from './plate-infos/StlPreview.tsx';
 
 function App() {
   const {nanoDlpData} = useNanoDLP();
@@ -37,6 +38,9 @@ function App() {
           }
           {nanoDlpData?.profile &&
               <JsonInfo plateInfo={nanoDlpData.profile} title="Profile Info"></JsonInfo>
+          }
+          {nanoDlpData?.image &&
+            <StlPreview imageData={nanoDlpData.image}></StlPreview>
           }
         </Grid>
       </Container>

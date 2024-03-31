@@ -8,6 +8,7 @@ export interface NanoDlpData {
   sliceFileNames?: string[];
   plate?: NanoDlpPlate;
   profile?: ResinProfile
+  image?: Blob;
 }
 
 interface NanoDlpState {

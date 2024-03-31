@@ -13,7 +13,7 @@ const JsonInfo = ({plateInfo, title}: JsonInfoProps) => {
 
         <Segment attached>
           <pre>
-            <code className="json">
+            <code className="json" style={{textWrap: 'balance', wordWrap: 'break-word'}}>
               {JSON.stringify(plateInfo, null, 2)}
             </code>
           </pre>

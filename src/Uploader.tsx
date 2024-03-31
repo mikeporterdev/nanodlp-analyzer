@@ -47,7 +47,7 @@ export const Uploader = () => {
     // todo: support more than one csv file
     const csvFile = csvFiles[csvFiles.length - 1]
 
-    const results = await csvFile.async('uint8array')
+    const chartData = await csvFile.async('uint8array')
       .then(uint8array => decompressGzip(uint8array))
       .then(decompressed => {
         const text = new TextDecoder('utf-8').decode(decompressed);
@@ -58,9 +58,9 @@ export const Uploader = () => {
             complete: (results) => resolve(results.data),
           });
         });
-      })
+      });
 
-    const chartData = results;
+    const imageData = await zip.file('3d.png')?.async('blob')
 
     const nanoDlpData: NanoDlpData = {
       fileName: file.name,
@@ -68,6 +68,7 @@ export const Uploader = () => {
       sliceFileNames,
       plate: plateData ? JSON.parse(plateData) : null,
       profile: profileData ? JSON.parse(profileData) : null,
+      image: imageData,
     }
 
     updateState({nanoDlpData})
