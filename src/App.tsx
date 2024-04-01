@@ -7,7 +7,7 @@ import JsonInfo from './plate-infos/JsonInfo.tsx';
 import PlateChart from './plate-infos/PlateChart.tsx';
 import StlPreview from './plate-infos/StlPreview.tsx';
 import LayerImagePreview from './plate-infos/LayerImagePreview.tsx';
-  import ReactGA from 'react-ga';
+import ReactGA from 'react-ga4';
 
 function App() {
   const TRACKING_ID = "G-QL40GYYKYB"; // OUR_TRACKING_ID

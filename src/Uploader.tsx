@@ -5,7 +5,7 @@ import pako from 'pako';
 import Papa from 'papaparse';
 import { ChartData } from './NanoDlpTypes.ts';
 import { Button, Form, Input } from 'semantic-ui-react';
-import ReactGA from 'react-ga';
+import ReactGA from 'react-ga4';
 
 export type GroupedFilesByLayer = {
   [key: string]: string[];
