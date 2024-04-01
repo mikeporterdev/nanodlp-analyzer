@@ -5,6 +5,7 @@ import pako from 'pako';
 import Papa from 'papaparse';
 import { ChartData } from './NanoDlpTypes.ts';
 import { Button, Form, Input } from 'semantic-ui-react';
+import ReactGA from 'react-ga';
 
 export type GroupedFilesByLayer = {
   [key: string]: string[];
@@ -43,6 +44,7 @@ export const Uploader = () => {
 
   const zip = new JSZip();
   const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
+
     // Check if files were selected and update the state
     const file = event.target.files ? event.target.files[0] : null
 
@@ -52,6 +54,7 @@ export const Uploader = () => {
 
     const value = await zip.loadAsync(file);
     const filesNames = Object.keys(value.files);
+    ReactGA.event({category: 'file', action: 'uploaded', label: 'test'})
 
     const plateData = await zip.file('plate.json')?.async('string');
     const profileData = await zip.file('profile.json')?.async('string');
