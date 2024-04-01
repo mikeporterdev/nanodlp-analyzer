@@ -1,4 +1,5 @@
 import { ChartData } from './NanoDlpTypes.ts';
+import * as uPlot from 'uplot';
 
 const ColourValues = [
   'FF0000', '00FF00', '0000FF', 'FFFF00', 'FF00FF', '00FFFF', '000000',
@@ -109,19 +110,8 @@ export const getSeriesAndData = (dataRows: ChartData[]) => {
   return {filteredData, filteredSeries, axes}
 }
 
-interface Series {
-  show?: boolean,
-  spanGaps?: boolean,
-  label?: string,
-  scale?: string,
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  value?: (a: any, b: any) => string,
-  stroke?: string,
-  width?: number,
-}
-
 function getSeries() {
-  const series: Series[] = [{}];
+  const series: uPlot.Series[] = [{}];
   axesInfo.forEach((element, key) => {
     series.push({
       show: true,
@@ -136,20 +126,8 @@ function getSeries() {
   return series;
 }
 
-interface Axes {
-  labelSize?: number,
-  gap?: number,
-  size?: number,
-  side?: number,
-  grid?: { show: boolean },
-  scale?: string,
-  label?: string,
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  values?: any
-}
-
 function prepareAxis(series) {
-  const axes: Axes[] = [{}];
+  const axes: uPlot.Axis[] = [{}];
   for (let seriesIdx = 1; seriesIdx < series.length; seriesIdx++) {
     const scale = series[seriesIdx].scale;
 
@@ -165,6 +143,9 @@ function prepareAxis(series) {
           side: 3,
           grid: {show: false},
           label: scale,
+        ticks: {
+
+        },
           scale: scale,
           values: (_, ticks) => ticks.map(rawValue => rawValue.toFixed(decimalPlaces)),
         }
