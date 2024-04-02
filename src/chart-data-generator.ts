@@ -1,6 +1,12 @@
 import { ChartData } from './NanoDlpTypes.ts';
 import * as uPlot from 'uplot';
 
+/**
+ * This file is mostly stolen from the NanoDLP repo with some TS support added in. It could use a significant amount of
+ * refactoring. Any refactorings should also be contributed back to the NanoDLP/Athena repos.
+ */
+
+
 const ColourValues = [
   'FF0000', '00FF00', '0000FF', 'FFFF00', 'FF00FF', '00FFFF', '000000',
   '800000', '008000', '000080', '808000', '800080', '008080', '808080',
@@ -12,47 +18,83 @@ const ColourValues = [
   'E00000', '00E000', '0000E0', 'E0E000', 'E000E0', '00E0E0', 'E0E0E0',
 ];
 const axesInfo = [
-  {'Type': 'mm', 'Name': 'Layer Height', 'Key': 'LayerHeight', 'Decimal': 2}, {
+  {
+    'Type': 'mm', 'Name': 'Layer Height', 'Key': 'LayerHeight', 'Decimal': 2
+  },
+  {
     'Type': 'px',
     'Name': 'Solid Area',
     'Key': 'SolidArea',
     'Decimal': 0
-  }, {'Type': '#', 'Name': 'Area Count', 'Key': 'AreaCount', 'Decimal': 0}, {
+  },
+  {
+    'Type': '#', 'Name': 'Area Count', 'Key': 'AreaCount', 'Decimal': 0
+  },
+  {
     'Type': 'px',
     'Name': 'Largest Area',
     'Key': 'LargestArea',
     'Decimal': 0
-  }, {'Type': 'mm/s', 'Name': 'Speed', 'Key': 'Speed', 'Decimal': 0}, {
+  },
+  {
+    'Type': 'mm/s', 'Name': 'Speed', 'Key': 'Speed', 'Decimal': 0
+  },
+  {
     'Type': 's',
     'Name': 'Cure Time',
     'Key': 'Cure',
     'Decimal': 2
-  }, {'Type': 'Pressure', 'Name': 'Pressure', 'Key': 'Pressure', 'Decimal': 2}, {
+  },
+  {
+    'Type': 'Pressure', 'Name': 'Pressure', 'Key': 'Pressure', 'Decimal': 2
+  },
+  {
     'Type': '°C',
     'Name': 'Resin Temp',
     'Key': 'TemperatureInside',
     'Decimal': 2
-  }, {'Type': '°C', 'Name': 'Temp', 'Key': 'TemperatureOutside', 'Decimal': 2}, {
+  },
+  {
+    'Type': '°C', 'Name': 'Temp', 'Key': 'TemperatureOutside', 'Decimal': 2
+  },
+  {
     'Type': 's',
     'Name': 'Layer Time',
     'Key': 'LayerTime',
     'Decimal': 2
-  }, {'Type': 'mm', 'Name': 'Lift Height', 'Key': 'LiftHeight', 'Decimal': 2}, {
+  },
+  {
+    'Type': 'mm', 'Name': 'Lift Height', 'Key': 'LiftHeight', 'Decimal': 2
+  },
+  {
     'Type': '°C',
     'Name': 'MCU Temp',
     'Key': 'TemperatureMCU',
     'Decimal': 2
-  }, {'Type': '°C', 'Name': 'Resin Temp Target', 'Key': 'TemperatureInsideTarget', 'Decimal': 2}, {
+  },
+  {
+    'Type': '°C', 'Name': 'Resin Temp Target', 'Key': 'TemperatureInsideTarget', 'Decimal': 2
+  },
+  {
     'Type': '°C',
     'Name': 'Temp Target',
     'Key': 'TemperatureOutsideTarget',
     'Decimal': 2
-  }, {'Type': '°C', 'Name': 'MCU Temp Target', 'Key': 'TemperatureMCUTarget', 'Decimal': 2}, {
+  },
+  {
+    'Type': '°C', 'Name': 'MCU Temp Target', 'Key': 'TemperatureMCUTarget', 'Decimal': 2
+  },
+  {
     'Type': 'RPM',
     'Name': 'MCU Fan RPM',
     'Key': 'MCUFanRPM',
     'Decimal': 2
-  }, {'Type': 'RPM', 'Name': 'UV Fan RPM', 'Key': 'UVFanRPM', 'Decimal': 2}]
+  },
+  {
+    'Type': 'RPM', 'Name': 'UV Fan RPM', 'Key': 'UVFanRPM', 'Decimal': 2
+  }
+
+]
 
 function isNotAllNull<T>(subArray: T[]): boolean {
   return subArray.some(element => element !== null);
@@ -151,7 +193,7 @@ function prepareAxis(series) {
   return axes;
 }
 
-function determineDecimalPlaces(scale) {
+function determineDecimalPlaces(scale: string) {
   const zeroPlaceScales = ['px', 'Pressure'];
   const onePlaceScales = ['s', 'mm', '°C'];
 
