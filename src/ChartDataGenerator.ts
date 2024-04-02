@@ -131,6 +131,30 @@ export const processData = (dataResponse: ChartData[]) => {
   return processedData
 }
 
+/**
+ * Iterates through a uplot dataset and backfills any null values where possible with the last non-null element for that
+ * series. Avoiding null datapoints in uplot allows the legend to work better by showing less blank values.
+ *
+ * If no last non-null element exists, it will keep the null.
+ *
+ * @param data - An array of arrays of elements for the chart. All inner arrays should be equal length.
+ */
+const backFillData = (data: Array<Array<number|null>>) => {
+  return data.map(serie => {
+    // starting from index 1 because the first item won't have a previous element to pull from
+    for (let serieElemIdx = 1; serieElemIdx < serie.length; serieElemIdx++) {
+
+      const serieElem = serie[serieElemIdx];
+      if (serieElem !== null) {
+        continue;
+      }
+
+      serie[serieElemIdx] = serie[serieElemIdx - 1];
+    }
+    return serie;
+  });
+}
+
 export const getSeriesAndData = (dataRows: ChartData[]) => {
   const series = getSeries();
 
@@ -138,10 +162,13 @@ export const getSeriesAndData = (dataRows: ChartData[]) => {
 
 
   const filteredData = processedData.filter(isNotAllNull);
+
+  const backFilledData = backFillData(filteredData);
+
   const filteredSeries = series.filter((_, index) => isNotAllNull(processedData[index]));
   const axes = prepareAxis(filteredSeries)
 
-  return {filteredData, filteredSeries, axes}
+  return {filteredData: backFilledData, filteredSeries, axes}
 }
 
 function getSeries() {
