@@ -1,7 +1,7 @@
 import { Container, Header, Segment } from 'semantic-ui-react';
 
 interface JsonInfoProps {
-  plateInfo: any,
+  plateInfo: object,
   title: string
 }
 

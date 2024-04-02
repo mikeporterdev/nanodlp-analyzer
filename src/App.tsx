@@ -10,7 +10,7 @@ import LayerImagePreview from './plate-infos/LayerImagePreview.tsx';
 import ReactGA from 'react-ga4';
 
 function App() {
-  const TRACKING_ID = "G-QL40GYYKYB"; // OUR_TRACKING_ID
+  const TRACKING_ID = 'G-QL40GYYKYB'; // OUR_TRACKING_ID
   ReactGA.initialize(TRACKING_ID);
 
   const {nanoDlpData} = useNanoDLP();
@@ -42,38 +42,32 @@ function App() {
                   </Grid.Row>
               }
 
-                <GridRow>
-
-
-                  {nanoDlpData?.sliceFileNames && nanoDlpData.zip &&
+              {nanoDlpData?.sliceFileNames && nanoDlpData.zip &&
+                  <GridRow>
                       <LayerImagePreview groupedLayerImages={nanoDlpData.sliceFileNames}
                                          jsZip={nanoDlpData.zip}></LayerImagePreview>
-                  }
-                </GridRow>
+                  </GridRow>
+              }
 
-                <Grid.Column>
-                  {nanoDlpData?.plate &&
+              {nanoDlpData?.plate &&
+                  <Grid.Column>
                       <JsonInfo plateInfo={nanoDlpData.plate} title="Plate Info"></JsonInfo>
-                  }
+                  </Grid.Column>
+              }
 
-                </Grid.Column>
-                <Grid.Column>
-                  {nanoDlpData?.profile &&
+              {nanoDlpData?.profile &&
+                  <Grid.Column>
                       <JsonInfo plateInfo={nanoDlpData.profile} title="Profile Info"></JsonInfo>
-                  }
+                  </Grid.Column>
+              }
 
-                </Grid.Column>
-                <Grid.Column>
-
-                    <GridRow>
-
-                      {nanoDlpData?.image &&
+              {nanoDlpData?.image &&
+                  <Grid.Column>
+                      <GridRow>
                           <StlPreview imageData={nanoDlpData.image}></StlPreview>
-                      }
-                    </GridRow>
-
-                </Grid.Column>
-
+                      </GridRow>
+                  </Grid.Column>
+              }
             </Grid>
         }
       </Container>
