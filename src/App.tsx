@@ -10,7 +10,7 @@ import LayerImagePreview from './plate-infos/LayerImagePreview.tsx';
 import ReactGA from 'react-ga4';
 
 function App() {
-  const TRACKING_ID = 'G-QL40GYYKYB'; // OUR_TRACKING_ID
+  const TRACKING_ID = 'G-QL40GYYKYB';
   ReactGA.initialize(TRACKING_ID);
 
   const {nanoDlpData} = useNanoDLP();
