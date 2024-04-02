@@ -70,8 +70,6 @@ export const processData = (dataResponse: ChartData[]) => {
   const processedData: Array<Array<number | null>> = series.map(() => []);
   let dataPointIndex = 0;
 
-  console.log(dataResponse.filter(i => i['ID'] < 1000))
-
   dataResponse
     .filter(i => i['ID'])
     .forEach(responseItem => {
@@ -85,13 +83,7 @@ export const processData = (dataResponse: ChartData[]) => {
         dataPointIndex++;
       }
 
-      try {
-        processedData[responseItem['T'] + 1][dataPointIndex - 1] = responseItem['V'];
-      } catch (e) {
-        console.log(processedData)
-        console.log(responseItem)
-        throw e;
-      }
+      processedData[responseItem['T'] + 1][dataPointIndex - 1] = responseItem['V'];
     })
 
   return processedData
@@ -143,9 +135,7 @@ function prepareAxis(series) {
           side: 3,
           grid: {show: false},
           label: scale,
-        ticks: {
-
-        },
+          ticks: {},
           scale: scale,
           values: (_, ticks) => ticks.map(rawValue => rawValue.toFixed(decimalPlaces)),
         }

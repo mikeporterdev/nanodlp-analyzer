@@ -21,7 +21,7 @@ function App() {
         <Header as="h1">NanoDLP Analyzer</Header>
 
         {!nanoDlpData &&
-            <Grid stackable columns={3}>
+            <Grid stackable centered columns={3}>
                 <Grid.Column>
                     <Header attached={'top'}>Upload a .nanodlp or .zip file</Header>
                     <Segment attached>

@@ -60,7 +60,6 @@ export const Uploader = () => {
     const profileData = await zip.file('profile.json')?.async('string');
 
     const sliceFileNames = groupFilesByFirstNumber(filesNames);
-    console.log(sliceFileNames)
 
     const csvFiles = Object.values(value.files).filter(file => file.name.startsWith('analytic-'));
 

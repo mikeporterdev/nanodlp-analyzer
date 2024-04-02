@@ -13,9 +13,6 @@ const LayerImagePreview = (props: LayerImagePreviewProps) => {
   const [imageUrl, setImageUrl] = useState<string | null>(null)
   const [layer, setLayer] = useState<number>(1)
 
-  console.log(props.groupedLayerImages[layer])
-
-
   const maxLayers = Object.keys(props.groupedLayerImages).length + 1;
 
   const renderLayer = () => {
@@ -26,15 +23,14 @@ const LayerImagePreview = (props: LayerImagePreviewProps) => {
         setImageUrl(URL.createObjectURL(file))
       }
     });
-  }
-  console.log(imageUrl)
-  if (!imageUrl) {
+  };
 
+  if (!imageUrl) {
     renderLayer()
   }
 
   const inc = () => {
-    setLayer( 1 + layer);
+    setLayer(1 + layer);
     renderLayer()
   }
 
@@ -48,38 +44,39 @@ const LayerImagePreview = (props: LayerImagePreviewProps) => {
   }
 
   const setLayerCmpTextInput = (_, layer) => {
-    console.log(layer.value)
     setLayer(parseInt(layer.value));
     renderLayer();
   }
 
   const setLayerCmp2 = (evt) => {
-    console.log(evt.target.value)
     setLayer(parseInt(evt.target.value));
     renderLayer();
   }
 
 
-
   return (
-    <GridRow>
-
     <Container>
-      <Header attached={'top'}>Slice Image Preview</Header>
-      <Segment attached>
-        <Form>
-            <Button labelPosition={'left'} icon={'left chevron'} onClick={dec} content={'Prev'} attached={'left'}/>
-            <Input type={'number'} style={{width: 80}} value={layer} onChange={setLayerCmpTextInput}/>
-            <Button labelPosition={'right'} icon={'right chevron'} onClick={inc} content={'Next'} attached={'right'}/>
-          <br/>
-          <input style={{width: "100%"}} type={'range'} min={1} max={maxLayers} value={layer} onChange={setLayerCmp2} />
-        </Form>
+      <GridRow>
+        <Container>
+          <Header attached={'top'}>Slice Image Preview</Header>
+          <Segment attached>
+            <Form>
+              <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+                <Button labelPosition={'left'} icon={'left chevron'} onClick={dec} content={'Prev'} attached={'left'}/>
+                <Input type={'number'} style={{width: 80}} value={layer} onChange={setLayerCmpTextInput}/>
+                <Button labelPosition={'right'} icon={'right chevron'} onClick={inc} content={'Next'}
+                        attached={'right'}/>
+              </div>
+              <br/>
+              <input style={{width: '100%'}} type={'range'} min={1} max={maxLayers} value={layer}
+                     onChange={setLayerCmp2}/>
+            </Form>
 
-        {imageUrl && <img src={imageUrl} style={{width: 300, aspectRatio: 2.25}}  alt="Extracted from ZIP"/>}
-
-      </Segment>
+            {imageUrl && <img src={imageUrl} style={{width: '100%', aspectRatio: 2.25}} alt="Extracted from ZIP"/>}
+          </Segment>
+        </Container>
+      </GridRow>
     </Container>
-    </GridRow>
   );
 };
 
