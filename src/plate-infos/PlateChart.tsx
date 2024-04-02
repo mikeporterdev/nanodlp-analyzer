@@ -2,7 +2,7 @@ import { Header, Segment } from 'semantic-ui-react';
 import { ChartData } from '../NanoDlpTypes.ts';
 import UplotReact from 'uplot-react';
 import 'uplot/dist/uPlot.min.css';
-import { getSeriesAndData } from '../chart-data-generator.ts';
+import { getSeriesAndData } from '../ChartDataGenerator.ts';
 import { AlignedData, Options } from 'uplot';
 
 interface PlateChartProps {

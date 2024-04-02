@@ -18,7 +18,7 @@ function App() {
   return (
     <>
       <Container style={{marginTop: '3em'}}>
-        <Header as="h1">NanoDLP Analyzer</Header>
+        <Header as="h1" style={{textAlign: 'center'}}>NanoDLP Analyzer</Header>
 
         {!nanoDlpData &&
             <Grid stackable centered columns={3}>
