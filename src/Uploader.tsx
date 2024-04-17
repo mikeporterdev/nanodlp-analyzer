@@ -66,7 +66,7 @@ export const Uploader = () => {
     // todo: support more than one csv file
     const csvFile = csvFiles[csvFiles.length - 1]
 
-    const chartData = await csvFile.async('uint8array')
+    const chartData = csvFile ? await csvFile.async('uint8array')
       .then(uint8array => decompressGzip(uint8array))
       .then(decompressed => {
         const text = new TextDecoder('utf-8').decode(decompressed);
@@ -77,7 +77,7 @@ export const Uploader = () => {
             complete: (results) => resolve(results.data),
           });
         });
-      });
+      }) : undefined;
 
     const imageData = await zip.file('3d.png')?.async('blob')
 
