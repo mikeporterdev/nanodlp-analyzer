@@ -17,83 +17,26 @@ const ColourValues = [
   'A00000', '00A000', '0000A0', 'A0A000', 'A000A0', '00A0A0', 'A0A0A0',
   'E00000', '00E000', '0000E0', 'E0E000', 'E000E0', '00E0E0', 'E0E0E0',
 ];
-const axesInfo = [
-  {
-    'Type': 'mm', 'Name': 'Layer Height', 'Key': 'LayerHeight', 'Decimal': 2
-  },
-  {
-    'Type': 'px',
-    'Name': 'Solid Area',
-    'Key': 'SolidArea',
-    'Decimal': 0
-  },
-  {
-    'Type': '#', 'Name': 'Area Count', 'Key': 'AreaCount', 'Decimal': 0
-  },
-  {
-    'Type': 'px',
-    'Name': 'Largest Area',
-    'Key': 'LargestArea',
-    'Decimal': 0
-  },
-  {
-    'Type': 'mm/s', 'Name': 'Speed', 'Key': 'Speed', 'Decimal': 0
-  },
-  {
-    'Type': 's',
-    'Name': 'Cure Time',
-    'Key': 'Cure',
-    'Decimal': 2
-  },
-  {
-    'Type': 'Pressure', 'Name': 'Pressure', 'Key': 'Pressure', 'Decimal': 2
-  },
-  {
-    'Type': '°C',
-    'Name': 'Resin Temp',
-    'Key': 'TemperatureInside',
-    'Decimal': 2
-  },
-  {
-    'Type': '°C', 'Name': 'Temp', 'Key': 'TemperatureOutside', 'Decimal': 2
-  },
-  {
-    'Type': 's',
-    'Name': 'Layer Time',
-    'Key': 'LayerTime',
-    'Decimal': 2
-  },
-  {
-    'Type': 'mm', 'Name': 'Lift Height', 'Key': 'LiftHeight', 'Decimal': 2
-  },
-  {
-    'Type': '°C',
-    'Name': 'MCU Temp',
-    'Key': 'TemperatureMCU',
-    'Decimal': 2
-  },
-  {
-    'Type': '°C', 'Name': 'Resin Temp Target', 'Key': 'TemperatureInsideTarget', 'Decimal': 2
-  },
-  {
-    'Type': '°C',
-    'Name': 'Temp Target',
-    'Key': 'TemperatureOutsideTarget',
-    'Decimal': 2
-  },
-  {
-    'Type': '°C', 'Name': 'MCU Temp Target', 'Key': 'TemperatureMCUTarget', 'Decimal': 2
-  },
-  {
-    'Type': 'RPM',
-    'Name': 'MCU Fan RPM',
-    'Key': 'MCUFanRPM',
-    'Decimal': 2
-  },
-  {
-    'Type': 'RPM', 'Name': 'UV Fan RPM', 'Key': 'UVFanRPM', 'Decimal': 2
-  }
 
+const axesInfo = [
+  { Type: "mm", Name: "Layer Height", Key: "LayerHeight", Decimal: 2 },
+  { Type: "px", Name: "Solid Area", Key: "SolidArea", Decimal: 0 },
+  { Type: "#", Name: "Area Count", Key: "AreaCount", Decimal: 0 },
+  { Type: "px", Name: "Largest Area", Key: "LargestArea", Decimal: 0 },
+  { Type: "mm/s", Name: "Speed", Key: "Speed", Decimal: 0 },
+  { Type: "s", Name: "Cure Time", Key: "Cure", Decimal: 2 },
+  { Type: "Pressure", Name: "Pressure", Key: "Pressure", Decimal: 2 },
+  { Type: "°C", Name: "Resin Temp", Key: "TemperatureInside", Decimal: 2 },
+  { Type: "°C", Name: "Temp", Key: "TemperatureOutside", Decimal: 2 },
+  { Type: "s", Name: "Layer Time", Key: "LayerTime", Decimal: 2 },
+  { Type: "mm", Name: "Lift Height", Key: "LiftHeight", Decimal: 2 },
+  { Type: "°C", Name: "MCU Temp", Key: "TemperatureMCU", Decimal: 2 },
+  { Type: "°C", Name: "Resin Temp Target", Key: "TemperatureInsideTarget", Decimal: 2 },
+  { Type: "°C", Name: "Temp Target", Key: "TemperatureOutsideTarget", Decimal: 2 },
+  { Type: "°C", Name: "MCU Temp Target", Key: "TemperatureMCUTarget", Decimal: 2 },
+  { Type: "RPM", Name: "MCU Fan RPM", Key: "MCUFanRPM", Decimal: 2 },
+  { Type: "RPM", Name: "UV Fan RPM", Key: "UVFanRPM", Decimal: 2 },
+  { Type: "s", Name: "Dynamic Wait Time", Key: "DynamicWait", Decimal: 2},
 ]
 
 function isNotAllNull<T>(subArray: T[]): boolean {
@@ -139,7 +82,7 @@ export const processData = (dataResponse: ChartData[]) => {
  *
  * @param data - An array of arrays of elements for the chart. All inner arrays should be equal length.
  */
-const backFillData = (data: Array<Array<number|null>>) => {
+const backFillData = (data: Array<Array<number | null>>) => {
   return data.map(serie => {
     // starting from index 1 because the first item won't have a previous element to pull from
     for (let serieElemIdx = 1; serieElemIdx < serie.length; serieElemIdx++) {
@@ -168,7 +111,7 @@ export const getSeriesAndData = (dataRows: ChartData[]) => {
   const filteredSeries = series.filter((_, index) => isNotAllNull(processedData[index]));
   const axes = prepareAxis(filteredSeries)
 
-  return {filteredData: backFilledData, filteredSeries, axes}
+  return { filteredData: backFilledData, filteredSeries, axes }
 }
 
 function getSeries() {
