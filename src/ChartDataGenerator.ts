@@ -68,7 +68,13 @@ export const processData = (dataResponse: ChartData[]) => {
         dataPointIndex++;
       }
 
-      processedData[responseItem['T'] + 1][dataPointIndex - 1] = responseItem['V'];
+      const dataEntryIdx = responseItem['T'] + 1;
+      const processedDatum = processedData[dataEntryIdx];
+      try {
+        processedDatum[dataPointIndex - 1] = responseItem['V'];
+      } catch (e) {
+        console.error({ e, responseItem: responseItem, processedDatum, dataEntryIdx });
+      }
     })
 
   return processedData
