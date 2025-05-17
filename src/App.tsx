@@ -34,10 +34,10 @@ function App() {
         }
         {nanoDlpData &&
             <Grid columns={3}>
-              {nanoDlpData?.chartData &&
+              {nanoDlpData?.chartDatas.length > 0 &&
                   <Grid.Row>
                       <Grid.Column width={16}>
-                          <PlateChart chartData={nanoDlpData.chartData}></PlateChart>
+                          <PlateChart></PlateChart>
                       </Grid.Column>
                   </Grid.Row>
               }

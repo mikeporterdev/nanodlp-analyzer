@@ -1,5 +1,5 @@
 import { NanoDlpData, useNanoDLP } from './NanoDlpFileContext.tsx';
-import JSZip from 'jszip';
+import JSZip, {JSZipObject} from 'jszip';
 import './Uploader.css'
 import pako from 'pako';
 import Papa from 'papaparse';
@@ -63,28 +63,34 @@ export const Uploader = () => {
 
     const csvFiles = Object.values(value.files).filter(file => file.name.startsWith('analytic-'));
 
-    // todo: support more than one csv file
-    const csvFile = csvFiles[csvFiles.length - 1]
+    const getChartDataForCsvFile = async (csvFile: JSZipObject) => {
+      const chartData = csvFile ? await csvFile.async('uint8array')
+          .then(uint8array => decompressGzip(uint8array))
+          .then(decompressed => {
+            const text = new TextDecoder('utf-8').decode(decompressed);
+            return new Promise<ChartData[]>((resolve) => {
+              Papa.parse<ChartData>(text, {
+                header: true,
+                dynamicTyping: true,
+                complete: (results) => resolve(results.data),
+              });
+            });
+          }) : undefined;
+      return chartData
+    }
 
-    const chartData = csvFile ? await csvFile.async('uint8array')
-      .then(uint8array => decompressGzip(uint8array))
-      .then(decompressed => {
-        const text = new TextDecoder('utf-8').decode(decompressed);
-        return new Promise<ChartData[]>((resolve) => {
-          Papa.parse<ChartData>(text, {
-            header: true,
-            dynamicTyping: true,
-            complete: (results) => resolve(results.data),
-          });
-        });
-      }) : undefined;
+
+    const chartDatas = await Promise.all(csvFiles.map(async (csvFile) => {
+      const chartData = await getChartDataForCsvFile(csvFile)
+      return { date: csvFile.name, data: chartData }
+    })    )
 
     const imageData = await zip.file('3d.png')?.async('blob')
 
     const nanoDlpData: NanoDlpData = {
       zip,
       fileName: file.name,
-      chartData,
+      chartDatas: (chartDatas.filter(i => i.data) as {date: string; data: ChartData[]}[]),
       sliceFileNames: Object.keys(sliceFileNames).length > 0 ? sliceFileNames : undefined,
       plate: plateData ? JSON.parse(plateData) : null,
       profile: profileData ? JSON.parse(profileData) : null,

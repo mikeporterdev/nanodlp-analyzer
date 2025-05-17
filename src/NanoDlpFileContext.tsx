@@ -6,7 +6,7 @@ import { GroupedFilesByLayer } from './Uploader.tsx';
 
 export interface NanoDlpData {
   fileName?: string;
-  chartData?: ChartData[];
+  chartDatas: { date: string, data: ChartData[]}[];
   sliceFileNames?: GroupedFilesByLayer;
   plate?: NanoDlpPlate;
   profile?: ResinProfile
